@@ -57,7 +57,7 @@ class Report:
         uncompleted_tasks = '\n'.join(uncompleted_tasks)
         format_name = f"{user_id}_{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}.txt"
         with open(format_name, 'w') as fp:
-            fp.write(f"Employer №{user_id}\n"
+            fp.write(f"Employee №{user_id}\n"
                      f"{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}\n"
                      f"Not completed:\n"
                      f" {uncompleted_tasks}\n")
