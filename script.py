@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 from operator import itemgetter
 from itertools import groupby
+from itertools import count
 
 
 class DeserializerJSON:
@@ -55,13 +56,15 @@ class Report:
         uncompleted_tasks = [item['title'] for item in notes['uncompleted_tasks'][0:50]]
         completed_tasks = '\n'.join(completed_tasks)
         uncompleted_tasks = '\n'.join(uncompleted_tasks)
+        # format_name = f"{user_id}.txt"
         format_name = f"{user_id}_{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}.txt"
         with open(format_name, 'w') as fp:
             fp.write(f"Employee №{user_id}\n"
                      f"{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}\n"
-                     f"Not completed:\n"
-                     f" {uncompleted_tasks}\n")
-            fp.write(f"Completed:\n {completed_tasks}\n")
+                     f"Uncompleted:\n"
+                     f" {uncompleted_tasks}\n"
+                     f"Completed:\n"
+                     f"{completed_tasks}\n")
 
 
 def main():
