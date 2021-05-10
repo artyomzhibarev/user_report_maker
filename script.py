@@ -27,9 +27,9 @@ class Parser:
         """
         Dictionary validation using existing keys
         """
-        existing_keys = {'userId', 'id', 'title', 'completed'}
+        existing_keys = ('userId', 'id', 'title', 'completed')
         user_id, note = notes
-        validate_notes = [item for item in note if not existing_keys.symmetric_difference(item.keys())]
+        validate_notes = [item for item in note if tuple(item.keys()) == existing_keys]
         validate_notes = [user_id, validate_notes]
         return validate_notes
 
