@@ -1,16 +1,25 @@
+import os
 from datetime import datetime
 import json
 from operator import itemgetter
 from itertools import groupby
-from itertools import count
+from typing import List
+import argparse
 
 
-class DeserializerJSON:
+class FileProvider:
     """Deserialize json to a Python object."""
 
     @staticmethod
-    def read(filename):
-        with open(filename, 'r') as fp:
+    def get_file(filename: str) -> str:
+        for file in os.listdir(os.getcwd()):
+            if os.path.isfile(os.path.join(os.getcwd(), file)) and file == filename:
+                return os.path.abspath(file)
+        raise FileNotFoundError
+
+    @staticmethod
+    def read(file):
+        with open(file, 'r') as fp:
             return json.load(fp)
 
 
@@ -56,8 +65,8 @@ class Report:
         uncompleted_tasks = [item['title'] for item in notes['uncompleted_tasks'][0:50]]
         completed_tasks = '\n'.join(completed_tasks)
         uncompleted_tasks = '\n'.join(uncompleted_tasks)
-        # format_name = f"{user_id}.txt"
-        format_name = f"{user_id}_{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}.txt"
+        format_name = f"{user_id}.txt"
+        # format_name = f"{user_id}_{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}.txt"
         with open(format_name, 'w') as fp:
             fp.write(f"Employee №{user_id}\n"
                      f"{datetime.now().strftime('20%y-%m-%d')}T{datetime.now().strftime('%H-%M')}\n"
@@ -69,8 +78,9 @@ class Report:
 
 def main():
     employees = 'employees.json'
-    des_json = DeserializerJSON()
-    data = des_json.read(employees)
+    file = FileProvider.get_file(employees)
+    des_json = FileProvider()
+    data = des_json.read(file)
     parser_ = Parser.parse_obj(data)
     for item in parser_:
         validate_item = Parser.validate_keys(item)
